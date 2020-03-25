@@ -1,16 +1,13 @@
 const awsAuth = require('aws-creds');
 const AWS = require('aws-sdk');
 const { response, reply, config } = require('@firstandthird/arc-rapptor');
-const path = require('path');
 const mime = require('mime');
 
 // eslint-disable-next-line require-await
 exports.handler = response(async req => {
   const s3 = awsAuth(AWS, 'S3', config.s3);
   const body = req.body;
-  const randomKey = [...Array(15)].map(_i => (~~(Math.random() * 36)).toString(36)).join('');
-  const ext = path.extname(body.filename);
-  const key = `${config.s3.folder}${new Date().getUTCFullYear()}/${randomKey}${ext}`;
+  const key = `${config.s3.folder}${new Date().getUTCFullYear()}/${body.filename}`;
   const contentType = mime.getType(body.filename);
 
   const params = {

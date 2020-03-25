@@ -1,6 +1,9 @@
 @app
 micro-s3-upload
 
+@static
+folder public
+
 @aws
 region us-east-1
 bucket micro-s3-upload
