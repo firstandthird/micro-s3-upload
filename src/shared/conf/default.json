@@ -1,0 +1,10 @@
+{
+  "s3": {
+    "bucket": "{{getEnv('AWS_BUCKET')}}",
+    "accessKey": "{{getEnv('AWS_ACCESS_KEY_ID', false)}}",
+    "secretAccessKey": "{{getEnv('AWS_SECRET_ACCESS_KEY', false)}}",
+    "region": "{{getEnv('AWS_DEFAULT_REGION', 'us-east-1')}}",
+    "s3Host": "{{getEnv('S3_HOST', '')}}",
+    "folder": "{{getEnv('FOLDER', '')}}"
+  }
+}

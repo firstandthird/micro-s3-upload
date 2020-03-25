@@ -1,0 +1,135 @@
+# generator-arc version: 2.1.1
+
+name: micro s3 upload Deploy
+
+on: push
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - uses: chrislennon/action-aws-cli@v1.1
+    - name: aws creds
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        aws configure --profile sgff set aws_access_key_id $AWS_ACCESS_KEY_ID
+        aws configure --profile sgff set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+    - name: arc config (Stage)
+      if: github.ref != 'refs/heads/master'
+      run: |
+        sed -i "s/@cdn//g" .arc
+    - name: arc config
+      id: config
+      run: |
+        BRANCH=$(echo ${{ github.ref }} | sed -E 's|refs/[a-zA-Z]+/||')
+        DEPLOY_ENVIRONMENT=$([ ${{ github.ref }} == 'refs/heads/master' ] && echo 'Production' || echo 'Staging')
+        STACK_NAME=$(echo micro-s3-upload-$DEPLOY_ENVIRONMENT-$BRANCH | sed -r 's/(^|-)(\w)/\U\2/g')
+        echo ::set-output name=stack_name::$STACK_NAME
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install project and arc
+      run: |
+        npm install
+    
+    - name: clientkit
+      run: |
+        npx clientkit prod
+    
+    - name: Deploy (Stage)
+      if: success() && github.ref != 'refs/heads/master'
+      id: deploy
+      run: |
+        BRANCH=$(echo ${{ github.ref }} | sed -E 's|refs/[a-zA-Z]+/||')
+        ARC_DOMAIN=$BRANCH. npx arc deploy --name $BRANCH
+        URL=$(aws cloudformation describe-stacks --profile sgff --region us-east-1 --stack-name ${{ steps.config.outputs.stack_name }} --query "Stacks[0].Outputs[?OutputKey=='Domain'].OutputValue" --output text)
+        echo ::set-output name=url::$URL
+    - name: Deploy (Production)
+      if: success() && github.ref == 'refs/heads/master'
+      run: |
+        npx arc deploy production
+    - name: Status Color
+      if: always()
+      id: statuscolor
+      run: |
+        STATUS_COLOR=$([ ${{ job.status }} == 'Success' ] && echo '#2ECC71' || echo '#E74C3C')
+        echo ::set-output name=status_color::$STATUS_COLOR
+    - name: Slack Notification (Stage)
+      if: always() && github.ref != 'refs/heads/master'
+      uses: 8398a7/action-slack@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+      with:
+        status: custom
+        payload: |
+          {
+            text: "micro s3 upload | Deploy | ${{ steps.config.outputs.stack_name }}",
+            attachments: [{
+              "author_name": "micro s3 upload Stage", // json
+              fallback: 'fallback',
+              color: '${{ steps.statuscolor.outputs.status_color }}',
+              title: 'Status',
+              text: '${{ job.status }}',
+              fields: [{
+                title: 'Staging Url',
+                value: '${{ steps.deploy.outputs.url }}',
+                short: false
+              }, {
+                title: 'Stack Name',
+                value: '${{ steps.config.outputs.stack_name }}',
+                short: true
+              }, {
+                title: 'Branch',
+                value: '${{ github.ref }}'.replace('refs/heads/', ''),
+                short: true
+              }],
+              actions: [{
+              }]
+            }]
+          }
+    - name: Slack Notification (Production)
+      if: always() && github.ref == 'refs/heads/master'
+      uses: 8398a7/action-slack@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+      with:
+        status: custom
+        payload: |
+          {
+            text: "micro s3 upload | Deploy | Production",
+            attachments: [{
+              "author_name": "micro s3 upload Production", // json
+              fallback: 'fallback',
+              color: '${{ steps.statuscolor.outputs.status_color }}',
+              title: 'Status',
+              text: '${{ job.status }}',
+              fields: [{
+                title: 'Url',
+                text: 'https://',
+                short: false
+              },
+              {
+                title: 'Stack Name',
+                value: '${{ steps.config.outputs.stack_name }}',
+                short: true
+              }, {
+                title: 'Branch',
+                value: 'master',
+                short: true
+              }],
+              actions: [{
+              }]
+            }]
+          }

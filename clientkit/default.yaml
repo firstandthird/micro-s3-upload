@@ -1,0 +1,9 @@
+dist: '{{CWD}}/public/_dist'
+hash:
+  disabled: true
+  mappingFile: '{{CWD}}/src/shared/assets.json'
+scripts:
+  dist: '{{dist}}'
+  cache: true
+  files:
+    common.js: '{{ assetPath }}/common.js'
