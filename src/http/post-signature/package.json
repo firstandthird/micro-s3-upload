@@ -2,7 +2,6 @@
   "name": "post-signature",
   "dependencies": {
     "@firstandthird/arc-rapptor": "^7.4.0",
-    "aws-creds": "^0.1.2",
     "mime": "^2.4.4",
     "aws-sdk": "^2.645.0"
   }
