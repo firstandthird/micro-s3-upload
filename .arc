@@ -16,6 +16,7 @@ post /signature
 @macros
 arc-macro-lambda-slack
 arc-macro-log-subscription
+s3-access
 
 @logSubscription
 function LambdaSlackHandler
