@@ -12,7 +12,7 @@ profile sgff
 @http
 get /
 get /upload-single
-get /upload-multiple
+get /upload-multi
 post /signature
 
 @macros

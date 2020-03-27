@@ -21,12 +21,15 @@ body {
   }
 
   & form.dropzone {
-    & .dz-message span {
+    & .dz-button {
       display: table-cell;
       vertical-align: middle;
       width: 100vw;
       height: 100vh;
       line-height: 1.4em;
+      background: transparent;
+      font-size: 1rem;
+      cursor: copy;
     }
   }
 
@@ -74,7 +77,16 @@ body {
 }
 
 .upload-multi {
-
+  & .dz-button {
+    display: table-cell;
+    vertical-align: middle;
+    width: 100vw;
+    height: 100vh;
+    line-height: 1.4em;
+    background: transparent;
+    font-size: 1rem;
+    cursor: copy;
+  }
   & #results {
     & .image-container {
       margin-bottom: 20px;
