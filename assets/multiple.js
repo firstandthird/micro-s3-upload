@@ -1,10 +1,8 @@
+/* eslint-env browser */
 import Dropzone from 'dropzone';
-import { findOne, addClass } from 'domassist';
-Dropzone.autoDiscover = false;
+import { findOne, hide } from 'domassist';
 
-const form = findOne('#upload');
-new Dropzone(form, {
-  method: 'post',
+Dropzone.options.uploader = {
   accept: async (file, done) => {
     file.postData = [];
 
@@ -24,13 +22,12 @@ new Dropzone(form, {
       return done('Error uploading file');
     }
 
-    const { signature } = await resp.json();
+    const { signature, cdn } = await resp.json();
 
     file.custom_status = 'ready';
     file.postData = signature.fields;
     file.contentType = signature.contentType;
-    file.s3Url = `${signature.url}/${signature.fields.key}`;
-    addClass(file.previewTemplate, 'uploading');
+    file.s3Url = `${cdn}/${signature.fields.key}`;
     done();
   },
   sending: (file, xhr, formData) => {
@@ -41,8 +38,25 @@ new Dropzone(form, {
     formData.append('success_action_status', '200');
     formData.append('content-type', file.contentType);
   },
-  complete: file => {
-    // eslint-disable-next-line no-console
-    console.log('UPLOADED', file.s3Url);
+  complete(file) {
+    if (file.status !== 'success') {
+      return alert('there was an error'); // eslint-disable-line no-alert
+    }
+
+    const imageUrl = file.s3Url;
+
+    hide(findOne('#uploader'));
+
+    const img = `
+      <div class="image-container">
+        <div class="image" style="background-image: url(${imageUrl});"></div>
+        <input readonly value="${imageUrl}" onfocus="this.select();"/>
+      </div>
+    `;
+
+    findOne('#results').insertAdjacentHTML('beforeend', img);
+    if (window.parent) {
+      window.parent.postMessage(imageUrl, '*');
+    }
   }
-});
+};

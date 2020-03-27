@@ -6,7 +6,7 @@ const mime = require('mime');
 exports.handler = response(async req => {
   const s3 = new AWS.S3();
   const body = req.body;
-  const key = `${config.s3.folder}${new Date().getUTCFullYear()}/${Date.now()}-${body.filename}`;
+  const key = `${config.folder}${new Date().getUTCFullYear()}/${Date.now()}-${body.filename}`;
   const contentType = mime.getType(body.filename);
 
   const params = {
@@ -27,5 +27,5 @@ exports.handler = response(async req => {
 
   signature.contentType = contentType;
 
-  return reply.json({ signature }, 200);
-});
+  return reply.json({ signature, cdn: config.cdn }, 200);
+}, { cors: true });

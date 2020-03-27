@@ -11,6 +11,8 @@ profile sgff
 
 @http
 get /
+get /upload-single
+get /upload-multiple
 post /signature
 
 @macros

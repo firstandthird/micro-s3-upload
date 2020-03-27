@@ -6,4 +6,10 @@ scripts:
   dist: '{{dist}}'
   cache: true
   files:
-    common.js: '{{ assetPath }}/common.js'
+    single.js: '{{ assetPath }}/single.js'
+    multiple.js: '{{ assetPath }}/multiple.js'
+stylesheets:
+  dist: '{{dist}}'
+  cache: true
+  files:
+    common.css: '{{ assetPath }}/common.css'

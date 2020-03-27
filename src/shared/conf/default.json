@@ -1,8 +1,14 @@
 {
   "s3": {
-    "bucket": "{{getEnv('AWS_BUCKET')}}",
-    "region": "{{getEnv('AWS_DEFAULT_REGION', 'us-east-1')}}",
-    "s3Host": "{{getEnv('S3_HOST', '')}}",
-    "folder": "{{getEnv('FOLDER', '')}}"
+    "bucket": "{{getEnv('S3_BUCKET')}}",
+    "region": "{{getEnv('AWS_DEFAULT_REGION', 'us-east-1')}}"
+  },
+  "siteTitle": "Micro Upload",
+  "folder": "{{getEnv('FOLDER', '')}}",
+  "cdn": "{{getEnv('CDN_HOST', `https://s3.amazonaws.com/${getEnv('S3_BUCKET')}`)}}",
+  "allowedExtensions": "{{getEnv('ALLOWED_EXTENSIONS', '.jpg,.jpeg,.png,.svg')}}",
+  "minimumImageSize": {
+    "width": "{{getEnv('MIN_WIDTH', 50)}}",
+    "height": "{{getEnv('MIN_HEIGHT', 50)}}"
   }
 }
