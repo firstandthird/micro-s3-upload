@@ -1,0 +1,39 @@
+{
+  "name": "micro-s3-upload",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"clientkit dev\" \"nodemon -x npx sandbox\" -k"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/firstandthird/micro-s3-upload.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/firstandthird/micro-s3-upload/issues"
+  },
+  "homepage": "https://github.com/firstandthird/micro-s3-upload#readme",
+  "eslintConfig": {
+    "extends": "firstandthird"
+  },
+  "dependencies": {
+    "@architect/architect": "^6.3.2",
+    "arc-macro-custom-domain": "^1.0.1",
+    "arc-macro-lambda-slack": "^3.2.0",
+    "arc-macro-log-subscription": "^1.0.0",
+    "arc-macro-s3-cors": "^1.2.0"
+  },
+  "devDependencies": {
+    "clientkit": "^5.0.0",
+    "concurrently": "^5.1.0",
+    "domassist": "^2.2.0",
+    "dropzone": "^5.7.0",
+    "eslint": "^5.16.0",
+    "eslint-config-firstandthird": "^4.3.0",
+    "eslint-plugin-import": "^2.17.3",
+    "nodemon": "^2.0.2"
+  }
+}

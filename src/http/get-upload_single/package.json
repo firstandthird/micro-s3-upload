@@ -1,0 +1,8 @@
+{
+  "name": "get-index",
+  "dependencies": {
+    "@firstandthird/arc-cache": "^2.2.0",
+    "@firstandthird/arc-nunjucks": "^2.3.2",
+    "@firstandthird/arc-rapptor": "^7.4.0"
+  }
+}

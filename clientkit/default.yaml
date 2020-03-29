@@ -1,0 +1,15 @@
+dist: '{{CWD}}/public/_dist'
+hash:
+  disabled: true
+  mappingFile: '{{CWD}}/src/shared/assets.json'
+scripts:
+  dist: '{{dist}}'
+  cache: true
+  files:
+    single.js: '{{ assetPath }}/single.js'
+    multiple.js: '{{ assetPath }}/multiple.js'
+stylesheets:
+  dist: '{{dist}}'
+  cache: true
+  files:
+    common.css: '{{ assetPath }}/common.css'
