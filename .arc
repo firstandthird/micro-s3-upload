@@ -18,9 +18,11 @@ post /signature
 @macros
 arc-macro-lambda-slack
 arc-macro-log-subscription
-s3-access
+arc-s3-bucket
 
 @logSubscription
 function LambdaSlackHandler
 filter ?error ?notice ?timeout ?"timed out"
 retention 14
+
+@s3
