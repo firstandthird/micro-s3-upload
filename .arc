@@ -14,6 +14,7 @@ get /
 get /upload-single
 get /upload-multi
 post /signature
+get /media/:image
 
 @macros
 arc-macro-lambda-slack

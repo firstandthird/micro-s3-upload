@@ -3,6 +3,7 @@
     "bucket": "{{getEnv('S3_BUCKET')}}",
     "region": "{{getEnv('AWS_DEFAULT_REGION', 'us-east-1')}}"
   },
+  "quality": 0.5,
   "siteTitle": "Micro Upload",
   "folder": "{{getEnv('FOLDER', '')}}",
   "cdn": "{{getEnv('CDN_HOST', `https://s3.amazonaws.com/${getEnv('S3_BUCKET')}`)}}",
