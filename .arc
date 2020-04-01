@@ -13,7 +13,6 @@ profile sgff
 
 @http
 get /
-get /media/:path
 get /upload-single
 get /upload-multi
 post /signature

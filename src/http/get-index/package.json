@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0",
+  "name": "pagedata-get-home",
+  "dependencies": {
+    "@firstandthird/arc-rapptor": "^7.4.1"
+  }
+}

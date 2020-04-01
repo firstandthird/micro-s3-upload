@@ -3,6 +3,7 @@
   "dependencies": {
     "aws-sdk": "^2.645.0",
     "optimiz": "^1.1.0",
+    "mime-types": "^2.1.22",
     "@firstandthird/arc-rapptor": "^7.4.0"
   }
 }

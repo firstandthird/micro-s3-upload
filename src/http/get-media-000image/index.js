@@ -2,6 +2,7 @@ const { config, response, reply } = require('@firstandthird/arc-rapptor');
 const { optimize } = require('optimiz');
 const uploadToS3 = require('./uploadToS3');
 const getFromS3 = require('./getFromS3');
+const mime = require('mime-types');
 
 // eslint-disable-next-line require-await
 exports.handler = response(async req => {
@@ -10,7 +11,13 @@ exports.handler = response(async req => {
   try {
     // if so just return that
     const existingOptimizedImage = await getFromS3('optimized', imageName);
-    return reply.html(existingOptimizedImage.Body);
+    return {
+      headers: {
+        'Content-Type': mime.lookup(imageName)
+      },
+      isBase64Encoded: true,
+      body: existingOptimizedImage.Body.toString('base64')
+    };
   } catch (e) {
     console.log(`${imageName}' not found in /optimized, will attempt to locate it in /originals`);
   }
@@ -21,13 +28,18 @@ exports.handler = response(async req => {
     try {
       const imageBuffer = await optimize({ quality: [config.quality, config.quality] }, originalImage.Body);
       // put it in /optimized
-      const image = await uploadToS3(`optimized/${imageName}`, imageBuffer);
-      // todo: return the raw image or the location from s3?
-      return reply.html(image);
+      await uploadToS3(`optimized/${imageName}`, imageBuffer);
+      return {
+        headers: {
+          'Content-Type': mime.lookup(imageName)
+        },
+        isBase64Encoded: true,
+        body: imageBuffer.Body.toString('base64')
+      };
     } catch (serverError) {
       return reply.html(serverError, 500);
     }
   } catch (e) {
-    return reply.html(`${imageName} does not exist in /originals`, 404);
+    return reply.html(`${imageName} does not exist in ${config.s3.bucket}/originals`, 404);
   }
 });
