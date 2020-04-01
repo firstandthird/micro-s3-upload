@@ -5,7 +5,7 @@
   },
   "quality": 0.5,
   "siteTitle": "Micro Upload",
-  "folder": "{{getEnv('FOLDER', '')}}",
+  "folder": "{{getEnv('FOLDER', 'uploads/')}}",
   "cdn": "{{getEnv('CDN_HOST', `https://s3.amazonaws.com/${getEnv('S3_BUCKET')}`)}}",
   "allowedExtensions": "{{getEnv('ALLOWED_EXTENSIONS', '.jpg,.jpeg,.png,.svg')}}",
   "minimumImageSize": {

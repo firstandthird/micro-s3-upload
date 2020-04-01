@@ -2,7 +2,9 @@ const { config, response, reply } = require('@firstandthird/arc-rapptor');
 const { render, env } = require('@firstandthird/arc-nunjucks');
 const { cacheReply } = require('@firstandthird/arc-cache');
 const querystring = require('querystring');
+const arc = require('@architect/functions');
 env.addGlobal('config', config.context);
+env.addGlobal('static', arc.static);
 
 // eslint-disable-next-line require-await
 exports.handler = response(cacheReply(async req => {

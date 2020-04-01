@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"clientkit dev\" \"nodemon -x npx sandbox\" -k"
+    "dev": "concurrently \"clientkit dev\" \"nodemon -i public -x npx sandbox\" -k",
+    "deploy": "clientkit prod && arc deploy"
   },
   "repository": {
     "type": "git",
@@ -24,7 +25,8 @@
     "arc-macro-custom-domain": "^1.0.1",
     "arc-macro-lambda-slack": "^3.2.0",
     "arc-macro-log-subscription": "^1.0.0",
-    "arc-macro-s3-cors": "^1.2.0"
+    "arc-macro-s3-cors": "^1.2.0",
+    "arc-s3-bucket": "^2.1.0"
   },
   "devDependencies": {
     "clientkit": "^5.0.0",
