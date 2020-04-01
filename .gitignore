@@ -3,3 +3,5 @@ node_modules
 public/_dist
 sam.json
 sam.yaml
+src/shared/assets.json
+public/static.json

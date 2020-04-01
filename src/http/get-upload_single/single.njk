@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <title>{{ config.siteTitle }}</title>
-    <link rel="stylesheet" href="{{ asset('_dist/common.css') }}">
+    <link rel="stylesheet" href="{{ static('_dist/common.css') }}">
     <style>
       .message-notice {
         font-size: 9px;
@@ -21,7 +21,7 @@
   {# <body>
     <form action="https://s3.{{ config.s3.region }}.amazonaws.com/{{ config.s3.bucket }}/" id="upload" class="dropzone"></form>
 
-    <script src="{{ asset('_dist/common.js') }}"></script>
+    <script src="{{ static('_dist/common.js') }}"></script>
   </body> #}
 
   <body class="upload-single">
@@ -43,6 +43,6 @@
         noticeText: '{{ noticeText }}'
       };
     </script>
-    <script src="{{ asset('_dist/single.js') }}"></script>
+    <script src="{{ static('_dist/single.js') }}"></script>
   </body>
 </html>

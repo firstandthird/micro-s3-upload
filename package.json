@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"clientkit dev\" \"nodemon -x npx sandbox\" -k"
+    "dev": "concurrently \"clientkit dev\" \"nodemon -i public -x npx sandbox\" -k",
+    "deploy": "clientkit prod && arc deploy"
   },
   "repository": {
     "type": "git",
