@@ -4,7 +4,7 @@ const { cacheReply } = require('@firstandthird/arc-cache');
 const querystring = require('querystring');
 const arc = require('@architect/functions');
 env.addGlobal('config', config.context);
-env.addGlobal('static', arc.static);
+env.addGlobal('static', (path) => arc.static(path, { stagePath: true }));
 
 // eslint-disable-next-line require-await
 exports.handler = response(cacheReply(async req => {

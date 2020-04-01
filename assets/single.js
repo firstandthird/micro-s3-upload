@@ -56,7 +56,7 @@ Dropzone.options.uploader = {
     file.postData = [];
 
     // eslint-disable-next-line no-undef
-    const resp = await fetch('/signature', {
+    const resp = await fetch('signature', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

@@ -1,9 +1,7 @@
 @app
 micro-s3-upload
 
-@cdn
 @static
-folder public
 fingerprint true
 
 @aws

@@ -1,3 +1,3 @@
 const { reply } = require('@firstandthird/arc-rapptor');
 
-exports.handler = (req) => reply.html('Not Found', { statusCode: 404 });
+exports.handler = async (req) => reply.html('Not Found', { statusCode: 404 });
