@@ -4,6 +4,7 @@
     "@architect/functions": "^3.8.1",
     "@firstandthird/arc-cache": "^2.2.0",
     "@firstandthird/arc-nunjucks": "^2.3.2",
-    "@firstandthird/arc-rapptor": "^7.4.0"
+    "@firstandthird/arc-rapptor": "^7.4.0",
+    "slugify": "^1.4.0"
   }
 }
