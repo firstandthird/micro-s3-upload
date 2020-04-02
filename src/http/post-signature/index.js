@@ -1,12 +1,13 @@
 const AWS = require('aws-sdk');
 const { response, reply, config } = require('@firstandthird/arc-rapptor');
 const mime = require('mime');
+const slugify = require('slugify');
 
 // eslint-disable-next-line require-await
 exports.handler = response(async req => {
   const s3 = new AWS.S3();
   const body = req.body;
-  const filename = `${new Date().getUTCFullYear()}-${Date.now()}-${body.filename}`;
+  const filename = `${new Date().getUTCFullYear()}-${Date.now()}-${slugify(body.filename)}`;
   const key = `${config.folderOriginals}/${filename}`;
   const contentType = mime.getType(body.filename);
 
