@@ -3,11 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <title>{{ config.siteTitle }}</title>
-    <link rel="stylesheet" href="{{ asset('common.css') }}">
+    <link rel="stylesheet" href="{{ static('_dist/common.css') }}">
   </head>
   <body class="upload-multi">
     <form id="uploader" action="https://s3.{{ config.s3.region }}.amazonaws.com/{{ config.s3.bucket }}/" class="dropzone"></form>
     <div id="results"></div>
-    <script src="{{ asset('multiple.js') }}"></script>
+    <script src="{{ static('_dist/multiple.js') }}"></script>
   </body>
 </html>

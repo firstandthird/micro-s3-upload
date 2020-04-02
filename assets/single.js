@@ -71,12 +71,12 @@ Dropzone.options.uploader = {
       return done('Error uploading file');
     }
 
-    const { signature, cdn } = await resp.json();
+    const { signature, mediaUrl } = await resp.json();
 
     file.custom_status = 'ready';
     file.postData = signature.fields;
     file.contentType = signature.contentType;
-    file.s3Url = `${cdn}/${signature.fields.key}`;
+    file.s3Url = mediaUrl;
     addClass(file.previewTemplate, 'uploading');
     done();
   },
