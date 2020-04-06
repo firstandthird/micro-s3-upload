@@ -8,6 +8,7 @@ fingerprint true
 region us-east-1
 bucket micro-s3-upload
 profile sgff
+cdn false
 
 @http
 get /
@@ -20,6 +21,7 @@ get /media/:image
 arc-macro-lambda-slack
 arc-macro-log-subscription
 arc-s3-bucket
+cdn
 
 @logSubscription
 function LambdaSlackHandler
@@ -27,3 +29,4 @@ filter ?error ?notice ?timeout ?"timed out"
 retention 14
 
 @s3
+cors

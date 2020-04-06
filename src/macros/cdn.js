@@ -6,7 +6,7 @@ module.exports = function(arc, cloudformation, stage) {
         Origins: [{
           DomainName: { 'Fn::Sub': '${MicroS3Upload}.execute-api.${AWS::Region}.amazonaws.com' },
           Id: { Ref: 'MicroS3Upload' },
-          OriginPath: '/media',
+          OriginPath: `/${stage}/media`,
           CustomOriginConfig: {
             HTTPSPort: 443,
             OriginProtocolPolicy: 'https-only',
@@ -58,6 +58,9 @@ module.exports = function(arc, cloudformation, stage) {
       'Fn::Sub': 'https://${ImageHandlerDistribution.DomainName}'
     }
   };
+
+
+  //cloudformation.Resources.PostSignature.Properties.Environment.Variables.CDN_HOST = { 'Fn::Sub': 'https://${ImageHandlerDistribution.DomainName}' };
 
   //console.log(JSON.stringify(cloudformation, null, 2));
   //throw new Error();
