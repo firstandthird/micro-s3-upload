@@ -13,6 +13,7 @@ exports.handler = response(async req => {
   if (existingOptimizedImage) {
     return {
       headers: {
+        'Cache-Control': 'max-age=31536000',
         'Content-Type': mime.lookup(imageName)
       },
       isBase64Encoded: true,
@@ -32,6 +33,7 @@ exports.handler = response(async req => {
     await uploadToS3(`${config.folderOptimized}/${imageName}`, imageBuffer);
     return {
       headers: {
+        'Cache-Control': 'max-age=31536000',
         'Content-Type': mime.lookup(imageName)
       },
       isBase64Encoded: true,
