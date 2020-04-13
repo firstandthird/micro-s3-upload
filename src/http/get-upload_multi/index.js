@@ -3,7 +3,7 @@ const { render, env } = require('@firstandthird/arc-nunjucks');
 const { cacheReply } = require('@firstandthird/arc-cache');
 const arc = require('@architect/functions');
 env.addGlobal('config', config.context);
-env.addGlobal('static', (path) => arc.static(path, { stagePath: true }));
+env.addGlobal('static', (path) => arc.static(path));
 
 // eslint-disable-next-line require-await
 exports.handler = response(cacheReply(async req => {

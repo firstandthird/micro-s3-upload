@@ -30,13 +30,8 @@ exports.handler = response(async req => {
   signature.contentType = contentType;
 
   const host = config.cdn || req.headers.origin;
-  let stage = '';
 
-  if (req.requestContext && req.requestContext.path.startsWith(`/${req.requestContext.stage}`)) {
-    stage += `/${req.requestContext.stage}`;
-  }
-
-  const mediaUrl = `${host}${stage}/media/${filename}`;
+  const mediaUrl = `${host}/media/${filename}`;
 
   return reply.json({ signature, mediaUrl }, 200);
 }, { cors: true });

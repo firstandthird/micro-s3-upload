@@ -1,0 +1,11 @@
+#!/bin/bash
+
+CMD=$1
+if [[ -z "$CMD" ]]; then
+  npx concurrently "clientkit dev" "nodemon -i public npx arc sandbox"
+fi
+
+if [[ "$CMD" == "deploy" ]]; then
+  npx clientkit prod
+  ./node_modules/@architect/deploy/cli.js deploy
+fi

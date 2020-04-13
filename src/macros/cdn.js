@@ -6,7 +6,7 @@ module.exports = function(arc, cloudformation, stage) {
         Origins: [{
           DomainName: { 'Fn::Sub': '${MicroS3Upload}.execute-api.${AWS::Region}.amazonaws.com' },
           Id: { Ref: 'MicroS3Upload' },
-          OriginPath: `/${stage}/media`,
+          OriginPath: `/${stage}`,
           CustomOriginConfig: {
             HTTPSPort: 443,
             OriginProtocolPolicy: 'https-only',
@@ -17,14 +17,14 @@ module.exports = function(arc, cloudformation, stage) {
         HttpVersion: 'http2',
         Comment: 'S3 Upload Image handler distribution',
         DefaultCacheBehavior: {
-          AllowedMethods: ['GET', 'HEAD'],
+          AllowedMethods: ['GET', 'HEAD', 'OPTIONS', 'PUT', 'PATCH', 'POST', 'DELETE'],
           TargetOriginId: { 'Fn::Sub': '${MicroS3Upload}' },
           ForwardedValues: {
             QueryString: false,
             Headers: ['Origin', 'Accept'],
             Cookies: { Forward: 'none' }
           },
-          ViewerProtocolPolicy: 'https-only'
+          ViewerProtocolPolicy: 'redirect-to-https'
         },
         CustomErrorResponses: [
           {

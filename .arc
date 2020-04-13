@@ -6,7 +6,6 @@ fingerprint true
 
 @aws
 region us-east-1
-bucket micro-s3-upload
 profile sgff
 cdn false
 
