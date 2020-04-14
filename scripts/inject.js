@@ -7,7 +7,7 @@ console.log('Using Version:', pkg.version);
 
 sam.Metadata = {
   'AWS::ServerlessRepo::Application': {
-    Name: 'pagedata-api',
+    Name: 'micro-s3-upload',
     Description: pkg.description,
     Author: pkg.author.replace('&', 'and'),
     SpdxLicenseId: pkg.license,
@@ -16,7 +16,7 @@ sam.Metadata = {
     HomePageUrl: pkg.homepage,
     SemanticVersion: pkg.version,
     SourceCodeUrl: pkg.repository.url.replace('git+', '').replace('.git', `/tree/${pkg.version}`),
-    Labels: ['pagedata']
+    Labels: ['upload', 's3']
   }
 };
 
