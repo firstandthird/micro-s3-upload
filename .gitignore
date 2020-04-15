@@ -5,3 +5,5 @@ sam.json
 sam.yaml
 src/shared/assets.json
 public/static.json
+.aws-sam
+template.yaml

@@ -1,5 +1,6 @@
 {
   "name": "post-signature",
+  "version": "1.0.0",
   "dependencies": {
     "@firstandthird/arc-rapptor": "^7.4.0",
     "mime": "^2.4.4",
