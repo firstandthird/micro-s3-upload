@@ -5,6 +5,11 @@
 echo "Generating Sam"
 npx arc deploy production --dry-run
 
+echo "Building assets"
+npm run build
+rm -rf ./scripts/copystatic/static
+cp -r ./public ./scripts/copystatic/static
+
 echo "Injecting metadata and environment variables"
 npm run inject
 
