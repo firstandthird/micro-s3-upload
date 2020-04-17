@@ -2,11 +2,18 @@ const AWS = require('aws-sdk');
 const fs = require('fs');
 const globby = require('globby');
 const s3 = new AWS.S3();
+const response = require('cfn-response');
 
-exports.handler = async () => {
+exports.handler = async (event, context) => {
+  // For Delete requests, immediately send a SUCCESS response.
+  if (event.RequestType === 'Delete') {
+    response.send(event, context, 'SUCCESS');
+    return;
+  }
+
   const files = await globby('./static/**/*');
 
-  const promises = files.map(async file => {
+  const promises = files.map(file => {
     const data = fs.readFileSync(file);
 
     return new Promise((resolve, reject) => {
@@ -15,9 +22,10 @@ exports.handler = async () => {
         Key: file.replace('./static/', ''),
         Body: Buffer.from(data, 'base64'),
         ACL: 'public-read'
-      }, (err, resp) => {
+      }, (err, _resp) => {
         if (err) {
           console.log(err, err.stack);
+          response.send(event, context, 'FAILED', { error: err.stack });
           return reject(err);
         }
         return resolve();
@@ -25,7 +33,7 @@ exports.handler = async () => {
     });
   });
 
-  await Promise.all(promises)
+  await Promise.all(promises);
 
-  return 'ok';
+  response.send(event, context, 'SUCCESS', {});
 };

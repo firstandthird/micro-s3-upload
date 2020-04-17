@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cfn-response": "^1.0.1",
     "globby": "^11.0.0"
   }
 }
