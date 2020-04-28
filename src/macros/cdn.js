@@ -20,7 +20,7 @@ module.exports = function(arc, cloudformation, stage) {
           AllowedMethods: ['GET', 'HEAD', 'OPTIONS', 'PUT', 'PATCH', 'POST', 'DELETE'],
           TargetOriginId: { 'Fn::Sub': '${MicroS3Upload}' },
           ForwardedValues: {
-            QueryString: false,
+            QueryString: true,
             Headers: ['Origin', 'Accept'],
             Cookies: { Forward: 'none' }
           },

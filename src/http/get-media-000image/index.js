@@ -26,11 +26,25 @@ exports.handler = response(async req => {
   if (!originalImage) {
     return reply.text('Not Found', { statusCode: 404 });
   }
+  // set up optimization params
+  // must be at least min image size:
+  const width = req.queryStringParameters.w > config.minimumImageSize.width ?
+    req.queryStringParameters.w : config.minimumImageSize.width;
+  const height = req.queryStringParameters.h > config.minimumImageSize.height ?
+    req.queryStringParameters.h : config.minimumImageSize.height;
+  // default is 'resize'
+  const type = req.queryStringParameters.resize || 'resize';
+  // set params based on whetehr resizing, covering or containing:
+  const params = { width, height, type };
+  // determine new file name:
+  const imageBaseTokens = imageName.split('.');
+  const newBaseName = imageBaseTokens.slice(0, imageBaseTokens.length - 1).join('.');
+  const newFileName = `${newBaseName}_${type}_${width}_${height}.${imageBaseTokens[imageBaseTokens.length - 1]}`;
   // optimize it:
   try {
-    const imageBuffer = await optimize({ quality: [config.quality, config.quality] }, originalImage.Body);
+    const imageBuffer = await optimize(params, originalImage.Body);
     // put it in /optimized
-    await uploadToS3(`${config.folderOptimized}/${imageName}`, imageBuffer);
+    await uploadToS3(`${config.folderOptimized}/${newFileName}`, imageBuffer);
     return {
       headers: {
         'Cache-Control': 'max-age=31536000',
