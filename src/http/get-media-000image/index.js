@@ -6,7 +6,7 @@ const mime = require('mime-types');
 
 // eslint-disable-next-line require-await
 exports.handler = response(async req => {
-  const imageName = req.pathParameters.image;
+  let imageName = req.pathParameters.image;
   // see if it exists in optimizedFolder
   // if so just return that
   const existingOptimizedImage = await getFromS3(config.folderOptimized, imageName);
@@ -33,18 +33,20 @@ exports.handler = response(async req => {
   const height = req.queryStringParameters.h > config.minimumImageSize.height ?
     req.queryStringParameters.h : config.minimumImageSize.height;
   // default is 'resize'
-  const type = req.queryStringParameters.resize || 'resize';
+  const type = req.queryStringParameters.resize || false;
   // set params based on whetehr resizing, covering or containing:
   const params = { width, height, type };
   // determine new file name:
-  const imageBaseTokens = imageName.split('.');
-  const newBaseName = imageBaseTokens.slice(0, imageBaseTokens.length - 1).join('.');
-  const newFileName = `${newBaseName}_${type}_${width}_${height}.${imageBaseTokens[imageBaseTokens.length - 1]}`;
+  if (type === 'resize') {
+    const imageBaseTokens = imageName.split('.');
+    const newBaseName = imageBaseTokens.slice(0, imageBaseTokens.length - 1).join('.');
+    imageName = `${newBaseName}_${type}_${width}_${height}.${imageBaseTokens[imageBaseTokens.length - 1]}`;
+  }
   // optimize it:
   try {
-    const imageBuffer = await optimize(params, originalImage.Body);
+    const imageBuffer = await optimize.resize(params, originalImage.Body);
     // put it in /optimized
-    await uploadToS3(`${config.folderOptimized}/${newFileName}`, imageBuffer);
+    await uploadToS3(`${config.folderOptimized}/${imageName}`, imageBuffer);
     return {
       headers: {
         'Cache-Control': 'max-age=31536000',
