@@ -1,12 +1,27 @@
 const { log, config, response, reply } = require('@firstandthird/arc-rapptor');
-const { optimize } = require('optimiz');
+const { optimize, resize } = require('optimiz');
 const uploadToS3 = require('./uploadToS3');
 const getFromS3 = require('./getFromS3');
 const mime = require('mime-types');
 
 // eslint-disable-next-line require-await
 exports.handler = response(async req => {
-  let imageName = req.pathParameters.image;
+  const originalImageName = req.pathParameters.image;
+  let imageName = originalImageName;
+  // get the resize name if we are going to adjust the image:
+  const type = req.queryStringParameters.type || false;
+  const width = req.queryStringParameters.w > config.minimumImageSize.width ?
+    req.queryStringParameters.w : config.minimumImageSize.width;
+  const height = req.queryStringParameters.h > config.minimumImageSize.height ?
+    req.queryStringParameters.h : config.minimumImageSize.height;
+  const doResize = (req.queryStringParameters.w || req.queryStringParameters.h) &&
+    (type === 'resize' || type === 'cover' || type === 'contain');
+  if (doResize) {
+    // default is 'resize'
+    const imageBaseTokens = imageName.split('.');
+    const newBaseName = imageBaseTokens.slice(0, imageBaseTokens.length - 1).join('.');
+    imageName = `${newBaseName}_${type}_${width}_${height}.${imageBaseTokens[imageBaseTokens.length - 1]}`;
+  }
   // see if it exists in optimizedFolder
   // if so just return that
   const existingOptimizedImage = await getFromS3(config.folderOptimized, imageName);
@@ -22,29 +37,25 @@ exports.handler = response(async req => {
   }
   log(['miss'], `${imageName} not found in ${config.folderOptimized}, will attempt to locate it in ${config.folderOriginals}`);
   // if not, grab it from originalFolder
-  const originalImage = await getFromS3(config.folderOriginals, imageName);
+  const originalImage = await getFromS3(config.folderOriginals, originalImageName);
   if (!originalImage) {
     return reply.text('Not Found', { statusCode: 404 });
   }
-  // set up optimization params
-  // must be at least min image size:
-  const width = req.queryStringParameters.w > config.minimumImageSize.width ?
-    req.queryStringParameters.w : config.minimumImageSize.width;
-  const height = req.queryStringParameters.h > config.minimumImageSize.height ?
-    req.queryStringParameters.h : config.minimumImageSize.height;
-  // default is 'resize'
-  const type = req.queryStringParameters.resize || false;
-  // set params based on whetehr resizing, covering or containing:
-  const params = { width, height, type };
-  // determine new file name:
-  if (type === 'resize') {
-    const imageBaseTokens = imageName.split('.');
-    const newBaseName = imageBaseTokens.slice(0, imageBaseTokens.length - 1).join('.');
-    imageName = `${newBaseName}_${type}_${width}_${height}.${imageBaseTokens[imageBaseTokens.length - 1]}`;
+  // resize/cover/contain the image if requested and either w/h was passed in:
+  let resizedImage = originalImage.Body;
+  if (doResize) {
+    // set params based on whetehr resizing, covering or containing:
+    const params = { width: parseInt(width, 10), height: parseInt(height, 10), type };
+    try {
+      resizedImage = await resize(params, resizedImage);
+    } catch (serverError) {
+      log(['optimize'], serverError);
+      return reply.text('Internal Error', { statusCode: 500 });
+    }
   }
-  // optimize it:
+  // always optimize it:
   try {
-    const imageBuffer = await optimize.resize(params, originalImage.Body);
+    const imageBuffer = await optimize({ quality: [config.quality, config.quality] }, resizedImage);
     // put it in /optimized
     await uploadToS3(`${config.folderOptimized}/${imageName}`, imageBuffer);
     return {
