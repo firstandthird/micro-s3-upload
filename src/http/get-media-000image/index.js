@@ -8,7 +8,6 @@ const mime = require('mime-types');
 exports.handler = response(async req => {
   const originalImageName = req.pathParameters.image;
   let imageName = originalImageName;
-  // get the resize name if we are going to adjust the image:
   const type = req.queryStringParameters.type || false;
   const width = req.queryStringParameters.w > config.minimumImageSize.width ?
     req.queryStringParameters.w : config.minimumImageSize.width;
@@ -16,6 +15,7 @@ exports.handler = response(async req => {
     req.queryStringParameters.h : config.minimumImageSize.height;
   const doResize = (req.queryStringParameters.w || req.queryStringParameters.h) &&
     (type === 'resize' || type === 'cover' || type === 'contain');
+  // get the resize name if we are going to adjust the image:
   if (doResize) {
     // default is 'resize'
     const imageBaseTokens = imageName.split('.');
@@ -41,7 +41,7 @@ exports.handler = response(async req => {
   if (!originalImage) {
     return reply.text('Not Found', { statusCode: 404 });
   }
-  // resize/cover/contain the image if requested and either w/h was passed in:
+  // resize/cover/contain the image if requested:
   let resizedImage = originalImage.Body;
   if (doResize) {
     // set params based on whetehr resizing, covering or containing:
