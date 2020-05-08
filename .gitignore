@@ -7,3 +7,4 @@ src/shared/assets.json
 public/static.json
 .aws-sam
 template.yaml
+scripts/copystatic/static

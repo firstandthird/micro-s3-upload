@@ -1,11 +1,12 @@
 {
   "name": "micro-s3-upload",
-  "version": "1.0.0",
+  "version": "1.1.1-alpha4",
   "description": "Simple uploader for directly pushing files to s3",
   "main": "index.js",
   "scripts": {
     "dev": "concurrently \"clientkit dev\" \"nodemon -i public -x npx sandbox\" -k",
     "deploy": "clientkit prod && ./node_modules/@architect/deploy/cli.js deploy",
+    "build": "clientkit build",
     "inject": "node ./scripts/inject.js"
   },
   "repository": {
@@ -22,10 +23,10 @@
     "extends": "firstandthird"
   },
   "dependencies": {
-    "@architect/architect": "^6.3.2",
-    "@architect/deploy": "github:firstandthird/arc-deploy#wip",
-    "arc-macro-custom-domain": "^1.0.1",
-    "arc-macro-lambda-slack": "^3.2.0",
+    "@architect/architect": "^6.3.5",
+    "@architect/deploy": "^1.6.1",
+    "arc-macro-custom-domain": "^2.1.0",
+    "arc-macro-lambda-slack": "^4.1.0",
     "arc-macro-log-subscription": "^1.0.0",
     "arc-macro-s3-cors": "^1.2.0",
     "arc-s3-bucket": "^2.2.0"
@@ -35,9 +36,9 @@
     "concurrently": "^5.1.0",
     "domassist": "^2.2.0",
     "dropzone": "^5.7.0",
-    "eslint": "^5.16.0",
-    "eslint-config-firstandthird": "^4.3.0",
-    "eslint-plugin-import": "^2.17.3",
-    "nodemon": "^2.0.2"
+    "eslint": "^6.8.0",
+    "eslint-config-firstandthird": "^5.0.0",
+    "eslint-plugin-import": "^2.20.2",
+    "nodemon": "^2.0.3"
   }
 }
