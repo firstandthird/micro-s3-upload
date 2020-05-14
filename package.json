@@ -4,7 +4,7 @@
   "description": "Simple uploader for directly pushing files to s3",
   "main": "index.js",
   "scripts": {
-    "build": "clientkit build",
+    "build": "clientkit build prod",
     "dev": "concurrently \"clientkit dev\" \"nodemon -i public -x npx sandbox\" -k",
     "deploy": "clientkit prod && ./node_modules/@architect/deploy/cli.js deploy",
     "inject": "node ./scripts/inject.js"
