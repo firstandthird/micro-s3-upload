@@ -29,3 +29,5 @@ retention 14
 
 @s3
 cors
+
+@sarStatic
