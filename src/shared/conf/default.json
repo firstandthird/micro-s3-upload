@@ -8,7 +8,7 @@
   "folderOriginals": "{{getEnv('FOLDER_ORIGINALS', 'uploads')}}",
   "folderOptimized": "{{getEnv('FOLDER_OPTIMIZED', 'optimized')}}",
   "cdn": "{{getEnv('CDN_HOST', '')}}",
-  "allowedExtensions": "{{getEnv('ALLOWED_EXTENSIONS', '.jpg,.jpeg,.png,.svg')}}",
+  "allowedExtensions": "{{getEnv('ALLOWED_EXTENSIONS', '.jpg,.jpeg,.png,.svg',.webp)}}",
   "minimumImageSize": {
     "width": "{{getEnv('MIN_WIDTH', 50)}}",
     "height": "{{getEnv('MIN_HEIGHT', 50)}}"
