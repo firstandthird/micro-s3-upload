@@ -25,7 +25,8 @@ exports.handler = response(async req => {
   }
   // see if it exists in optimizedFolder
   // if so just return that
-  if (req.headers.accept && req.headers.accept.includes('image/webp') && !originalImageName.endsWith('webp')) {
+  const useWebp = req.headers.accept && req.headers.accept.includes('image/webp') && !originalImageName.endsWith('webp');
+  if (useWebp) {
     imageName = `${newBaseName}.webm`;
   }
   const existingOptimizedImage = await getFromS3(config.folderOptimized, imageName);
@@ -58,7 +59,7 @@ exports.handler = response(async req => {
     }
   }
   // see if we need to make a webp version:
-  if (req.headers.accept && req.headers.accept.includes('image/webp') && !originalImageName.endsWith('webp')) {
+  if (useWebp) {
     resizedImage = await converter(resizedImage, originalImageName);
   }
   console.log(imageName);
