@@ -53,6 +53,10 @@ exports.handler = response(async req => {
       return reply.text('Internal Error', { statusCode: 500 });
     }
   }
+  // see if we need to make a webp version:
+  if (req.headers.accept && req.headers.accept.includes('image/webp') && !originalImageName.endsWith('webp')) {
+    resizedImage = await converter(resizedImage, originalImageName);
+  }
   // always optimize it:
   try {
     const imageBuffer = await optimize({ quality: [config.quality, config.quality] }, resizedImage);
