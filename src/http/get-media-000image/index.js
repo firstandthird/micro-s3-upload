@@ -62,7 +62,6 @@ exports.handler = response(async req => {
   if (useWebp) {
     resizedImage = await converter(resizedImage, originalImageName);
   }
-  console.log(imageName);
   // always optimize it:
   try {
     const imageBuffer = await optimize({ quality: [config.quality, config.quality] }, resizedImage);
