@@ -27,7 +27,7 @@ exports.handler = response(async req => {
   // if so just return that
   const useWebp = req.headers.accept && req.headers.accept.includes('image/webp') && !originalImageName.endsWith('webp');
   if (useWebp) {
-    imageName = `${newBaseName}.webm`;
+    imageName = `${newBaseName}.webp`;
   }
   const existingOptimizedImage = await getFromS3(config.folderOptimized, imageName);
   if (existingOptimizedImage) {
