@@ -3,11 +3,14 @@ const { optimize, resize } = require('optimiz');
 const uploadToS3 = require('./uploadToS3');
 const getFromS3 = require('./getFromS3');
 const mime = require('mime-types');
+const converter = require('./convertToWebp');
 
 // eslint-disable-next-line require-await
 exports.handler = response(async req => {
   const originalImageName = req.pathParameters.image;
   let imageName = originalImageName;
+  const imageBaseTokens = imageName.split('.');
+  const newBaseName = imageBaseTokens.slice(0, imageBaseTokens.length - 1).join('.');
   const type = req.queryStringParameters.type || false;
   const width = req.queryStringParameters.w > config.minimumImageSize.width ?
     req.queryStringParameters.w : config.minimumImageSize.width;
@@ -18,12 +21,14 @@ exports.handler = response(async req => {
   // get the resize name if we are going to adjust the image:
   if (doResize) {
     // default is 'resize'
-    const imageBaseTokens = imageName.split('.');
-    const newBaseName = imageBaseTokens.slice(0, imageBaseTokens.length - 1).join('.');
     imageName = `${newBaseName}_${type}_${width}_${height}.${imageBaseTokens[imageBaseTokens.length - 1]}`;
   }
   // see if it exists in optimizedFolder
   // if so just return that
+  const useWebp = req.headers.accept && req.headers.accept.includes('image/webp') && !originalImageName.endsWith('webp');
+  if (useWebp) {
+    imageName = `${newBaseName}.webp`;
+  }
   const existingOptimizedImage = await getFromS3(config.folderOptimized, imageName);
   if (existingOptimizedImage) {
     return {
@@ -52,6 +57,10 @@ exports.handler = response(async req => {
       log(['optimize'], serverError);
       return reply.text('Internal Error', { statusCode: 500 });
     }
+  }
+  // see if we need to make a webp version:
+  if (useWebp) {
+    resizedImage = await converter(resizedImage, originalImageName);
   }
   // always optimize it:
   try {
