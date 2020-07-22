@@ -4,11 +4,12 @@ micro-s3-upload
 @static
 fingerprint true
 
+@cdn
+false
+
 @aws
 region us-east-1
 profile sgff
-
-@cdn false
 
 @http
 get /
@@ -32,4 +33,11 @@ retention 14
 @s3
 cors
 
+@slack
+staging %slackHook%
+production %slackHook%
+
 @sarStatic
+
+@sarParams
+SLACK_HOOK 'Webhook for slack notify'
