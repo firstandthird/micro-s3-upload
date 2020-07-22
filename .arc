@@ -7,7 +7,8 @@ fingerprint true
 @aws
 region us-east-1
 profile sgff
-cdn false
+
+@cdn false
 
 @http
 get /
@@ -17,6 +18,7 @@ post /signature
 get /media/:image
 
 @macros
+architect/macro-http-api
 arc-macro-lambda-slack
 arc-macro-log-subscription
 arc-s3-bucket
