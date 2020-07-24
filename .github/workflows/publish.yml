@@ -31,6 +31,9 @@ jobs:
     - name: npm install
       run: |
         npm install
+    - name: build
+      run: |
+        npm run build
     - name: Package
       env:
         SLACK_WEBHOOK: ${{ secrets.APP_SLACK_WEBHOOK }}

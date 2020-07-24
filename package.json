@@ -5,9 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "clientkit prod",
-    "dev": "concurrently \"clientkit dev\" \"nodemon -i public -x npx sandbox\" -k",
-    "deploy": "clientkit prod && ./node_modules/@architect/deploy/cli.js deploy",
-    "inject": "node ./scripts/inject.js"
+    "dev": "concurrently \"clientkit dev\" \"nodemon -i public -x npx sandbox\" -k"
   },
   "repository": {
     "type": "git",
