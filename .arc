@@ -23,7 +23,6 @@ architect/macro-http-api
 arc-macro-lambda-slack
 arc-macro-log-subscription
 arc-s3-bucket
-cdn
 
 @logSubscription
 function LambdaSlackHandler
@@ -40,4 +39,4 @@ production %slackHook%
 @sarStatic
 
 @sarParams
-SLACK_HOOK 'Webhook for slack notify'
+SLACK_HOOK "Webhook for slack notify"
