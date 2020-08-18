@@ -1,6 +1,6 @@
 {
   "name": "micro-s3-upload",
-  "version": "1.2.0-alpha6",
+  "version": "1.2.0-alpha7",
   "description": "Simple uploader for directly pushing files to s3",
   "main": "index.js",
   "scripts": {
