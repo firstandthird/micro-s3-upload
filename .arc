@@ -19,7 +19,7 @@ post /signature
 get /media/:image
 
 @macros
-architect/macro-http-api
+firstandthird/macro-http-api
 arc-macro-lambda-slack
 arc-macro-log-subscription
 arc-s3-bucket
