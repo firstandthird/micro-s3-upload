@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@architect/architect": "^6.5.4",
-    "@architect/macro-http-api": "^1.0.0",
+    "@firstandthird/macro-http-api": "1.0.1-beta2",
     "@firstandthird/arc-package-sar": "^1.1.3",
     "arc-macro-custom-domain": "^1.0.1",
     "arc-macro-lambda-slack": "^4.1.2",
