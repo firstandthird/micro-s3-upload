@@ -46,11 +46,9 @@ exports.handler = response(async req => {
   if (!originalImage) {
     return reply.text('Not Found', { statusCode: 404 });
   }
-  console.log('FOUND: ', config.folderOriginals, originalImageName);
   // resize/cover/contain the image if requested:
   let resizedImage = originalImage.Body;
   if (doResize) {
-    console.log('REsizing!');
     // set params based on whetehr resizing, covering or containing:
     const params = { width: parseInt(width, 10), height: parseInt(height, 10), type };
     try {
@@ -60,20 +58,16 @@ exports.handler = response(async req => {
       return reply.text('Internal Error', { statusCode: 500 });
     }
   }
-  console.log('done resize');
+
   // see if we need to make a webp version:
   if (useWebp) {
-    console.log('Make webp');
     resizedImage = await converter(resizedImage, originalImageName);
   }
-  console.log('Done WEBP!');
   // always optimize it:
   try {
     const imageBuffer = await optimize({ quality: [config.quality, config.quality] }, resizedImage);
     // put it in /optimized
     await uploadToS3(`${config.folderOptimized}/${imageName}`, imageBuffer);
-    console.log(`${config.folderOptimized}/${imageName}`);
-    console.log(imageName, 'Ready to Roll');
     return {
       headers: {
         'Cache-Control': 'max-age=31536000',
