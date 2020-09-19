@@ -3,7 +3,6 @@ const { optimize, resize } = require('optimiz');
 const uploadToS3 = require('./uploadToS3');
 const getFromS3 = require('./getFromS3');
 const mime = require('mime-types');
-const converter = require('./convertToWebp');
 
 // eslint-disable-next-line require-await
 exports.handler = response(async req => {
@@ -25,10 +24,7 @@ exports.handler = response(async req => {
   }
   // see if it exists in optimizedFolder
   // if so just return that
-  const useWebp = req.headers.accept && req.headers.accept.includes('image/webp') && !originalImageName.endsWith('webp');
-  if (useWebp) {
-    imageName = `${newBaseName}.webp`;
-  }
+
   const existingOptimizedImage = await getFromS3(config.folderOptimized, imageName);
   if (existingOptimizedImage) {
     return {
@@ -59,10 +55,6 @@ exports.handler = response(async req => {
     }
   }
 
-  // see if we need to make a webp version:
-  if (useWebp) {
-    resizedImage = await converter(resizedImage, originalImageName);
-  }
   // always optimize it:
   try {
     const imageBuffer = await optimize({ quality: [config.quality, config.quality] }, resizedImage);
