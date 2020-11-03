@@ -1,0 +1,80 @@
+name: Pagedata V2 API Publish
+
+on:
+  create:
+    tags:
+      - '*'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - uses: chrislennon/action-aws-cli@v1.1
+    - name: aws creds
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        aws configure --profile default set aws_access_key_id $AWS_ACCESS_KEY_ID
+        aws configure --profile default set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install
+      run: |
+        npm install
+    - name: build
+      run: |
+        npm run build
+    - name: Package
+      env:
+        SLACK_WEBHOOK: ${{ secrets.APP_SLACK_WEBHOOK }}
+      run: |
+        OUTPUT=$(npx sar | grep sam)
+        PCKG_CMD=$(echo $OUTPUT | cut -d' ' -f-9)
+        PUBL_CMD=$(echo $OUTPUT | cut -d' ' -f10-)
+        $PCKG_CMD
+        $PUBL_CMD
+    - name: Status Color
+      id: statuscolor
+      run: |
+        STATUS_COLOR=$([ ${{ job.status }} == 'Success' ] && echo '#2ECC71' || echo '#E74C3C')
+        echo ::set-output name=status_color::$STATUS_COLOR
+    - name: Slack Notification (Production)
+      uses: 8398a7/action-slack@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+      with:
+        status: custom
+        payload: |
+          {
+            text: "Pagedata API V2 | Package",
+            attachments: [{
+              "author_name": "Pagedata API V2 Package", // json
+              fallback: 'fallback',
+              color: '${{ steps.statuscolor.outputs.status_color }}',
+              title: 'Status',
+              text: '${{ job.status }}',
+              fields: [{
+                title: 'Url',
+                text: 'https://console.aws.amazon.com/serverlessrepo/home?region=us-east-1#/published-applications/arn:aws:serverlessrepo:us-east-1:488791064862:applications~pagedata-api',
+                short: false
+              },
+              {
+                title: 'Release',
+                value: '${{  github.ref }}',
+                short: true
+              }],
+              actions: [{
+              }]
+            }]
+          }

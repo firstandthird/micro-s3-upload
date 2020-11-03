@@ -3,7 +3,7 @@
     "bucket": "{{getEnv('S3_BUCKET')}}",
     "region": "{{getEnv('AWS_DEFAULT_REGION', 'us-east-1')}}"
   },
-  "quality": 0.5,
+  "quality": 50,
   "siteTitle": "Micro Upload",
   "folderOriginals": "{{getEnv('FOLDER_ORIGINALS', 'uploads')}}",
   "folderOptimized": "{{getEnv('FOLDER_OPTIMIZED', 'optimized')}}",
