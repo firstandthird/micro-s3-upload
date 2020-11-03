@@ -4,6 +4,6 @@
     "@firstandthird/arc-rapptor": "^8.0.0",
     "aws-sdk": "^2.718.0",
     "mime-types": "^2.1.22",
-    "optimiz": "^2.1.0"
+    "optimiz": "^3.0.0"
   }
 }

@@ -57,7 +57,7 @@ exports.handler = response(async req => {
 
   // always optimize it:
   try {
-    const imageBuffer = await optimize({ quality: [config.quality, config.quality] }, resizedImage);
+    const imageBuffer = await optimize({ quality: config.quality }, resizedImage);
     // put it in /optimized
     await uploadToS3(`${config.folderOptimized}/${imageName}`, imageBuffer);
     return {
